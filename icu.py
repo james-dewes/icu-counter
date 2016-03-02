@@ -24,11 +24,11 @@ def tell_google(ga_string):
     takes the GA property ID i.e. UA-XXXX-Y and makes a POST request to Google to log activity against
     that property under the category icu-counter
     """
-    values = urllib.urlencode(dict(v='1', tid=ga_string, cid='15828', t='Sevent', ec='icu-counter', ea='person'))
+    values = urllib.urlencode(dict(v='1', tid=ga_string, cid='12345', t='Sevent', ec='icu-counter', ea='person'))
     url = 'http://www.google-analytics.com/collect'
     headers = {'Content-type': 'application/x-www-form-urlencoded',
                'Accept': 'text/plain'}
-    headers = ('User-agent':'ICU pepople counter', 'From:':'james@jamesdewes.com')
+    headers = ('User-agent':'ICU people counter', 'From:':'test@somedomain.com')
     req = urllib2.Request(url, values, headers)
     response = urllib2.urlopen(req)
     print(response.geturl())
