@@ -1,20 +1,21 @@
-import RPi.GPIO as GPIO
-import time, urllib, urllib2
+import RPi.GPIO as GPIO, RPi.GPIO as GPIO2, time, urllib, urllib2
+from msvcrt import getch
 
 # get the GA property string
 ga_string = open('prop.txt').read()
 
+# set the GPIO pin the sensor is attached to
 GPIO.setmode(GPIO.BCM)
 sensor = 21
 GPIO.setup(sensor, GPIO.IN)
 
-import RPi.GPIO as GPIO2
-import time
-
+# setup an output for the blinking LED
 GPIO2.setmode(GPIO.BCM)
 led = 5
 GPIO2.setup(led, GPIO.OUT)
 
+
+# TODO add a local log file function
 
 def tell_google(ga_string):
     """
@@ -36,18 +37,31 @@ def tell_google(ga_string):
     return true
 
 
-test = 0
-while test != 1:
-    if GPIO.input(sensor):
-        print("I see you")
-        tell_google()
+def blink_led():
+    """
+    null
+    :return: null
+    Cause the attached LED to blink when the sensor is triggered
+    """
+    for i in range(0, 3):
         GPIO2.output(led, 1)
-        time.sleep(2)
+        time.sleep(0.5)
         GPIO2.output(led, 0)
+
+
+# infinate loop of main operation
+while True:
+    # check for escape key
+    key = ord(getch())
+    if key == 27:  # ESC
+        break
+    elif GPIO.input(sensor):
+        tell_google(ga_string)
+        blink_led()
         time.sleep(2)
-        # test = 1
     else:
-        # print("waiting")
         time.sleep(0.5)
 
+#cleanup
 GPIO.cleanup()
+GPIO2.cleanup()
